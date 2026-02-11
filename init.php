@@ -1,4 +1,5 @@
 <?php
+include_once "startSession.php";
 include_once "config.php";
 
 spl_autoload_register(function ($className) {
