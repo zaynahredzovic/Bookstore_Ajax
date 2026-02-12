@@ -5,7 +5,8 @@ const bookPrice = document.getElementById("bookPrice");
 
 const nameError = document.querySelector(".nameError");
 const authorError = document.querySelector(".authorError");
-const priceError = document.querySelector(".priceError"); 
+const priceError = document.querySelector(".priceError");
+const bookStatus = document.getElementById("bookStatus"); 
 
 let nameStatus = true;
 let authorStatus = true;
@@ -49,4 +50,18 @@ bookForm.addEventListener("submit", (e) => {
         priceStatus = true;
     }
 
+    if(nameStatus === false && authorStatus === false && priceStatus === false){
+    
+        //send ajax request if there is no errors
+        if(bookStatus.value === "addBook"){
+            $.ajax({
+                type: 'POST',
+                url: 'ajax/addBook.php',
+                data: $(bookForm).serialize(),
+                success: (feedback) => {
+                    console.log(feedback);
+                }   
+            })
+        }
+    }
 })
