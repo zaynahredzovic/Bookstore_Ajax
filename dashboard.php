@@ -55,5 +55,6 @@ if(!isset($_SESSION['userId'])){
     <script src="assets/js/jquery-3.6.0.min.js"></script>
     <script src="assets/js/validations.js"></script>
     <script src="assets/js/hideMsg.js"></script>
+    <script src="assets/js/book.js"></script>
 </body>
 </html>

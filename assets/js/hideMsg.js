@@ -7,8 +7,9 @@ if(success){
     }, 5000);
 }
 
-if(loader){
-    setTimeout(() => {
-        loader.style.display = 'none';
-    }, 4000);
-}
+// necessaz for the course, annoying while testing
+// if(loader){
+//     setTimeout(() => {
+//         loader.style.display = 'none';
+//     }, 4000);
+// }

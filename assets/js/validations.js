@@ -79,3 +79,16 @@ function checkEmail(input, errorClass, tableName, columnName) {
         })
     });
 }
+
+function isNegative(input, label, errorClass) {
+    const fieldName = Number(input.value.trim());
+    if (fieldName < 0) {
+        errorClass.innerHTML = label + ' must not be negative';
+        input.classList.add('borderRed');
+        return false;
+    }else{
+        errorClass.innerHTML = '';
+        input.classList.remove('borderRed');
+        return true;
+    }
+}
