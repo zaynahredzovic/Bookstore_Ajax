@@ -19,13 +19,18 @@ if(!isset($_SESSION['userId'])){
 </head>
 <body>
 
-<!-- <div class="loader-section">
-	<div class="loader">
-		<div class="load">
-			<span class="element"></span>
-		</div> 
-	</div>
-</div> -->
+<?php
+    if(isset($_SESSION['loader']) && $_SESSION['loader'] === true){
+        echo '<div class="loader-section">
+                <div class="loader">
+                    <div class="load">
+                        <span class="element"></span>
+                    </div> 
+                </div>
+            </div>';
+        unset($_SESSION['loader']);
+    }
+?>
 
     <?php include 'components/model.php'; ?>
 
@@ -49,5 +54,6 @@ if(!isset($_SESSION['userId'])){
 	<script src="assets/js/app.js"></script>
     <script src="assets/js/jquery-3.6.0.min.js"></script>
     <script src="assets/js/validations.js"></script>
+    <script src="assets/js/hideMsg.js"></script>
 </body>
 </html>

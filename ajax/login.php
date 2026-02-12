@@ -14,6 +14,7 @@ if(isset($_POST['email']) && isset($_POST['password'])){
             $hashedPassword = $row->pwd;
             if(password_verify($password, $hashedPassword)){
                 $_SESSION['userId'] = $id;
+                $_SESSION['loader'] = true;
                 echo json_encode(['status' => 'success', 'message' => 'Login successful']);
             }else{
                 echo json_encode(['status' => 'errorPassword', 'message' => 'Incorrect password']);
