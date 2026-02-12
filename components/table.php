@@ -1,5 +1,7 @@
 <div class="table-section">
-	<table class="table">
+	<div class="message"></div>
+	<div id="table"></div>
+	<!-- <table class="table">
 		<thead>
 			<tr>
 				<th>Book Name</th>
@@ -33,6 +35,6 @@
 			</tr>
 		</tbody>
 	</table>
-	<!-- Close table -->
+	Close table -->
 </div>
 <!-- Close table-section -->
