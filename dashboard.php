@@ -1,0 +1,53 @@
+<?php
+include_once 'startSession.php';
+
+if(!isset($_SESSION['userId'])){
+    header('Location: login.php');
+    exit();
+}
+
+?> 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Dashboard</title>
+	<!-- Link CSS file -->
+	<?php include_once 'components/cssLinks.php'; ?>
+</head>
+<body>
+
+<!-- <div class="loader-section">
+	<div class="loader">
+		<div class="load">
+			<span class="element"></span>
+		</div> 
+	</div>
+</div> -->
+
+    <?php include 'components/model.php'; ?>
+
+    <?php include 'components/nav.php'; ?>
+	<!-- Close nav -->
+
+	<div class="container">
+	<div class="row mt-40">
+		<div class="col-9">
+        <?php include 'components/table.php'; ?>
+</div>
+<!-- Close col-9 -->
+<div class="col-3">
+	<?php include 'components/countSection.php'; ?>
+</div>
+<!-- Close col-3 -->
+</div>
+<!-- Close row -->
+</div>
+<!-- Close container  -->
+	<script src="assets/js/app.js"></script>
+    <script src="assets/js/jquery-3.6.0.min.js"></script>
+    <script src="assets/js/validations.js"></script>
+</body>
+</html>

@@ -1,3 +1,11 @@
+<?php include_once 'startSession.php';
+if(isset($_SESSION['userId'])){
+	header('Location: dashboard.php');
+	exit();
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
