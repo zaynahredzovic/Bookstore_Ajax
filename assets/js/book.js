@@ -112,7 +112,7 @@ function fetchBooks(){
                 result += `<tr>
 				<td>${book.bookName}</td>
 				<td>${book.authorName}</td>
-				<td><div class="dollor">$ ${book.price}.00</div></td>
+				<td><div class="dollor">$ ${book.bookPrice}.00</div></td>
                 <td><a href="" class="btn btn-warning btn-small updateBookBtn" onclick="updateBook(${book.id}, '${book.bookName}', '${book.authorName}', ${book.bookPrice});">Edit <span>&#9998;</span></a></td>
                 <td><a href="javascript:void(0);" class="btn btn-danger btn-small" onclick="deleteBook(${book.id});">Delete <span>&#10006;</span></a></td>
 			</tr>`;
@@ -169,4 +169,27 @@ function addBookForm(){
     heading.innerHTML = "Add Book";
     bookButton.value = "add book \u276F";  
     bookStatus.value = "addBook";
+}
+
+function deleteBook(id){
+
+    const confirmBox = confirm("Are you really sure you want to delete this book ?");
+    if(confirmBox){
+        $.ajax({
+            type : 'POST',
+            url  : 'ajax/deleteBook.php',
+            data : {id},
+            success : (response) => {
+                const convertedRes = JSON.parse(response);
+                if(convertedRes.status === "success"){
+                    message.innerHTML = `<div class="alert success">
+                            <div class="alert-icon"><div class="alertIcon">&check;</div></div>
+                            <p> <strong>Success!</strong> ${convertedRes.msg} </p>
+                        </div>`;
+                        hideMsg();
+                        fetchBooks();
+                }
+            }
+        })
+    }
 }
