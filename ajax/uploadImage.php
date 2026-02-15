@@ -11,9 +11,9 @@ if(isset($_FILES['image']['name'])){
     $imageExt   = strtolower($imageExt);
     $store      = "../assets/img/";
 
-    if(!in_array($imageExt, $extensions)){
-        echo json_encode(["status" => "extension", "msg" => "Sorry " . $imageExt . " is not a valid extension"]);
-    } else {
+if(!in_array($imageExt, $extensions)){
+    echo json_encode(["status" => "extension", "msg" => "Sorry " . $imageExt . " is not a valid extension"]);
+} else {
         $uniquName = rand().$imageName;
         move_uploaded_file($imageTmp, $store.$uniquName);
         $userId = $_SESSION['userId'];
