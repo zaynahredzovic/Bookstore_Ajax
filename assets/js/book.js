@@ -1,126 +1,172 @@
-const bookForm = document.getElementById("bookForm");
-const bookName = document.getElementById("bookName");
-const authorName = document.getElementById("authorName");
-const bookPrice = document.getElementById("bookPrice");
+const bookForm          = document.getElementById("bookForm");
+const bookName          = document.getElementById("bookName");
+const bookAuthor        = document.getElementById("bookAuthor");
+const bookPrice         = document.getElementById("bookPrice");
+const nameError         = document.querySelector(".nameError");
+const autherError       = document.querySelector(".authorError");
+const priceError        = document.querySelector(".priceError");
+const bookStatus        = document.getElementById("bookStatus");
+const message           = document.querySelector(".message");
+let heading             = document.querySelector(".heading");
+let bookButton          = document.getElementById("bookButton");
+const modelContainer    = document.querySelector(".model-container");
+const bookId            = document.getElementById("bookId");
+const totalBooks        = document.querySelector(".totalBooks");
+const totalAmount       = document.querySelector(".totalAmount");
+let nameStatus = autherStatus = priceStatus = true;
 
-const nameError = document.querySelector(".nameError");
-const authorError = document.querySelector(".authorError");
-const priceError = document.querySelector(".priceError");
-
-const bookStatus = document.getElementById("bookStatus"); 
-const message = document.querySelector(".message");
-
-let nameStatus = true;
-let authorStatus = true;
-let priceStatus = true;
-
-
+// Event listener for book 
 bookForm.addEventListener("submit", (e) => {
-    e.preventDefault();
 
-    //book name validation
-
-    if(Empty(bookName, "Book name is required", nameError)){
-        nameStatus = false;
-    }else {
-        nameStatus = true;
-    }
-
-    //author name validation
-
-    if(Empty(authorName, "Author name is required", authorError)){
-        authorStatus = false;
-        if(notInt(authorName, "Author name", authorError)){
-            authorStatus = false;
-        }else {
-            authorStatus = true;
+        e.preventDefault();
+        
+        // Book name validations
+        if(Empty(bookName, "Book Name", nameError)){
+            nameStatus = false;
+        } else {
+            nameStatus = true;
         }
-    }else {
-        authorStatus = true;
-    }
 
-    //price validation
+        // Author validations 
+        if(Empty(bookAuthor, "Author Name", autherError)){
+            autherStatus = false;
+            if(notInt(bookAuthor, "Author Name", autherError)){
+                autherStatus = false;
+            } else {
+                autherStatus = true;
+            }
+        } else {
+            autherStatus = true;
+        }
 
-    if(Empty(bookPrice, "Book price is required", priceError)){
-        priceStatus = false;
-        if(isNegative(bookPrice, "Book price", priceError)){
+        // Book price validations
+        if(Empty(bookPrice, "Price", priceError)){
             priceStatus = false;
-        }else {
+            if(isNegative(bookPrice, 'Price', priceError)){
+                priceStatus = false;
+            } else {
+                priceStatus = true;
+            }
+        } else {
             priceStatus = true;
         }
-    }else {
-        priceStatus = true;
-    }
-
-    if(nameStatus === false && authorStatus === false && priceStatus === false){
-    
-        //send ajax request if there is no errors
-        if(bookStatus.value === "addBook"){
-            $.ajax({
-                type: 'POST',
-                url: 'ajax/addBook.php',
-                data: $(bookForm).serialize(),
-                success: (feedback) => {
-                    const response = JSON.parse(feedback);
-                    if(response.status === "success"){
-                        modelContainer.style.display = 'none';
-                        bookForm.reset();
-                        message.innerHTML = `<div class="alert success">
-                        <div class="alert-icon"><div class="alertIcon">&check;</div><div>
-                        <p> <strong>Success!</strong> ${response.message}</p>
+        
+        if(nameStatus === false && autherStatus === false && priceStatus === false ){
+            console.log('submitted');
+            // Send ajax request for add book
+            if(bookStatus.value === "addBook"){
+                $.ajax({
+                    type : 'POST',
+                    url  : 'ajax/addBook.php',
+                    data : $(bookForm).serialize(),
+                    success : (response) => {
+                        const convertedRes = JSON.parse(response);
+                        if(convertedRes.status === "success"){
+                            modelContainer.style.display = "none";
+                            bookForm.reset();
+                            message.innerHTML = `<div class="alert success">
+                            <div class="alert-icon"><div class="alertIcon">&check;</div></div>
+                            <p> <strong>Success!</strong> ${convertedRes.msg} </p>
                         </div>`;
                         hideMsg();
                         fetchBooks();
+                        }
                     }
-                }   
-            })
+                })
+            } else if(bookStatus.value === "updateBook"){
+                $.ajax({
+                    type : 'POST',
+                    url  : 'ajax/updateBook.php',
+                    data : $(bookForm).serialize(),
+                    success : (response) => {
+                        const convertedRes = JSON.parse(response);
+                        if(convertedRes.status === "success"){
+                            modelContainer.style.display = "none";
+                            bookForm.reset();
+                            message.innerHTML = `<div class="alert success">
+                            <div class="alert-icon"><div class="alertIcon">&check;</div></div>
+                            <p> <strong>Success!</strong> ${convertedRes.msg} </p>
+                        </div>`;
+                        hideMsg();
+                        fetchBooks();
+                        }
+                    }
+                })
+            }
         }
-    }
-})
+    })
 
-function fetchBooks() {
 
+
+function fetchBooks(){
+    
     let table = document.getElementById("table");
     $.ajax({
-        type: 'GET',
-        url: 'ajax/fetchBooks.php',
-        success: (feedback) => {
-            let response;
-            try {
-                response = JSON.parse(feedback);
-            } catch (e) {
-                console.error("Error parsing JSON:", e);
-                return;
-            }
-
-            if(response.status === "success"){
-                let results = "";
-                response.data.forEach(book => {
-                    results += `<tr>
+        type : 'GET',
+        url  : 'ajax/fetchBooks.php',
+        success : (response) => {
+            const res = JSON.parse(response);
+            if(res.status === "success"){
+            let result = "";
+                res.data.forEach((book) => {
+                result += `<tr>
 				<td>${book.bookName}</td>
 				<td>${book.authorName}</td>
-				<td><div class="dollor">$${book.bookPrice}</div></td>
-                <td><a href="" class="btn btn-warning btn-small showModel" >Edit <span>&#9998;</span></a></td>
-                <td><a href="" class="btn btn-danger btn-small">Delete <span>&#10006;</span></a></td>
+				<td><div class="dollor">$ ${book.price}.00</div></td>
+                <td><a href="" class="btn btn-warning btn-small updateBookBtn" onclick="updateBook(${book.id}, '${book.bookName}', '${book.authorName}', ${book.bookPrice});">Edit <span>&#9998;</span></a></td>
+                <td><a href="javascript:void(0);" class="btn btn-danger btn-small" onclick="deleteBook(${book.id});">Delete <span>&#10006;</span></a></td>
 			</tr>`;
                 })
-                table.innerHTML =  `<table class="table">
-		<thead>
-			<tr>
-				<th>Book Name</th>
-				<th>Author Name</th>
-				<th>Book Price</th>
-				<th>Edit</th>
-				<th>Delete</th>
-			</tr>
-		</thead>
-		<tbody>${results}</tbody></table>`;
-            }else if(response.status === "error"){
-                table.innerHTML = `No books found. Please add some books.`;
+                table.innerHTML = `<table class="table">
+                <thead>
+                    <tr>
+                        <th>Book Name</th>
+                        <th>Author Name</th>
+                        <th>Book Price</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>${result}</tbody></table>`;
+            } else if(res.status === "noRecords"){
+            table.innerHTML = `<div style="font-size:1.4rem;border: 1px solid silver;padding: 1rem;border-radius: 3px;color:silver">No Records</div>`;
             }
-            
+            const updateBookBtn = document.querySelectorAll(".updateBookBtn");
+                updateBookBtn.forEach((btn) => {
+                    btn.addEventListener("click", (e) => {
+                        e.preventDefault();
+                        modelBox();
+                    })
+                })
         }
     })
 }
 
 fetchBooks();
+
+function updateBook(id, bookN, bookA, bookP){
+    bookName.value = bookN;
+    bookAuthor.value = bookA;
+    bookPrice.value = bookP;
+    heading.innerHTML = "Update Book";
+    bookButton.value = "update book \u276F";
+    bookName.classList.remove("borderRed");
+    bookAuthor.classList.remove("borderRed");
+    bookPrice.classList.remove("borderRed");
+    nameError.innerHTML = "";
+    autherError.innerHTML = "";
+    priceError.innerHTML = "";
+    bookStatus.value = "updateBook";
+    bookId.value = id;
+}
+
+
+function addBookForm(){
+
+    bookName.value = "";
+    bookAuthor.value = "";
+    bookPrice.value = "";
+    heading.innerHTML = "Add Book";
+    bookButton.value = "add book \u276F";  
+    bookStatus.value = "addBook";
+}

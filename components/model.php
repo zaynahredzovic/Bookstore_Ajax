@@ -10,7 +10,7 @@
 			</div>
 			<!-- Close group -->
 			<div class="group">
-				<input type="text"  id="authorName" name="authorName" class="control" placeholder="Author Name...">
+				<input type="text"  id="bookAuthor" name="bookAuthor" class="control" placeholder="Author Name...">
 				<div class="error authorError"></div>
 			</div>
 			<!-- Close group -->
@@ -20,8 +20,9 @@
 			</div>
 			<!-- Close group -->
 			<input type="hidden" id="bookStatus" value="addBook">
+			<input type="hidden" id="bookId" name="hiddenId">
 			<div class="group">
-				<input type="submit"  id="addBookBtn" class="btn btn-sweet" value="Add book &#8250;">
+				<input type="submit"  id="bookButton" class="btn btn-sweet" value="Add book &#8250;">
 			</div>
 			<!-- Close group -->
 		</form>
