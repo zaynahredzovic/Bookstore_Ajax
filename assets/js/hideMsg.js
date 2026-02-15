@@ -1,10 +1,10 @@
 function hideMsg() {
-    const success = document.querySelector('.success');
+    const alert = document.querySelector('.alert');
     //const loader = document.querySelector('.loader-section');
     
-    if(success){
+    if(alert){
         setTimeout(() => {
-            success.style.display = 'none';
+            alert.style.display = 'none';
         }, 5000);
     }
     
