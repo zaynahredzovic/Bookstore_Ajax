@@ -70,6 +70,7 @@ bookForm.addEventListener("submit", (e) => {
                         </div>`;
                         hideMsg();
                         fetchBooks();
+                        booksInfo();
                         }
                     }
                 })
@@ -89,6 +90,7 @@ bookForm.addEventListener("submit", (e) => {
                         </div>`;
                         hideMsg();
                         fetchBooks();
+                        booksInfo();
                         }
                     }
                 })
@@ -188,8 +190,29 @@ function deleteBook(id){
                         </div>`;
                         hideMsg();
                         fetchBooks();
+                        booksInfo();
                 }
             }
         })
     }
 }
+
+function booksInfo() {
+    $.ajax({
+
+        type : 'GET',
+        url  : 'ajax/booksInfo.php',
+        success : (response) => {
+            const res = JSON.parse(response);
+            if(res.status === "success"){
+                totalBooks.innerHTML = `Total Books<h2>${res.totalBooks}</h2>`;
+                totalAmount.innerHTML = `Total Amount <h2> $ ${res.totalAmount}.00</h2>`;
+            } else if(res.status === "noBooks"){
+                totalBooks.innerHTML = `Total Books<h2>0.00</h2>`;
+                totalAmount.innerHTML = `Total Amount <h2> $ 0.00</h2>`;
+            }
+        }
+    })
+}
+
+booksInfo();
