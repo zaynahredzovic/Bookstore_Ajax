@@ -14,6 +14,8 @@ const bookId            = document.getElementById("bookId");
 const totalBooks        = document.querySelector(".totalBooks");
 const totalAmount       = document.querySelector(".totalAmount");
 let nameStatus = autherStatus = priceStatus = true;
+const records_per_page = 3;
+let page = 1;
 
 // Event listener for book 
 bookForm.addEventListener("submit", (e) => {
@@ -71,6 +73,7 @@ bookForm.addEventListener("submit", (e) => {
                         hideMsg();
                         fetchBooks();
                         booksInfo();
+                        createPagination();
                         }
                     }
                 })
@@ -103,9 +106,11 @@ bookForm.addEventListener("submit", (e) => {
 function fetchBooks(){
     
     let table = document.getElementById("table");
+    let offset = (page-1)*records_per_page;
     $.ajax({
-        type : 'GET',
+        type : 'POST',
         url  : 'ajax/fetchBooks.php',
+        data : {offset: offset, records_per_page: records_per_page},
         success : (response) => {
             const res = JSON.parse(response);
             if(res.status === "success"){
@@ -191,6 +196,7 @@ function deleteBook(id){
                         hideMsg();
                         fetchBooks();
                         booksInfo();
+                        createPagination();
                 }
             }
         })
@@ -216,3 +222,84 @@ function booksInfo() {
 }
 
 booksInfo();
+
+function createPagination() {
+    const paginate = document.querySelector('.paginate')
+    let links = '';
+    let leftLinks = '';
+    let rigthLinks = '';
+
+    $.ajax({
+        type: 'get',
+        url: 'ajax/rowsCount.php',
+        success: (feedback) =>{
+            const response = JSON.parse(feedback);
+            if(response.status === 'success'){
+                let totalPages = Math.ceil(response.rows / records_per_page);
+                let startLoop = page;
+                let diff = totalPages - page;
+
+                startLoop = (diff<=3) ? totalPages -3 : startLoop;
+
+                let endLoop = startLoop+3;
+
+                leftLinks = (page > 1) ? `<li><a href='javascript:void(0)' onclick='prev()'><span style='font-size: 18px;'>&laquo</span></a></li>
+                <li><a href='javascript:void(0)' onclick='firstPage()'><span style='font-size: 12px;'>First</span></a></li>` : "";
+
+                if(startLoop<=0) startLoop = 1;
+                startLoop = (startLoop<=0) ? startLoop = 1 : startLoop;
+
+                for (let i = startLoop; i <= endLoop; i++) {
+
+                    let active = (i===page) ? 'active' : '';
+
+                    links += `<li><a href='javascript:void(0)' onclick='clickLink(${i})' class='${active}' >${i}</a></li>`;
+                }
+
+                rigthLinks = (page<totalPages) ? `<li><a href='javascript:void(0)'  onclick='lastPage(${totalPages})'><span style='font-size: 12px;'>Last</span></a></li>
+                <li><a href='javascript:void(0)'  onclick='next()'><span style='font-size: 18px;'>&raquo</span></a></li>` : '';
+
+                if(response.rows > 3){
+                    paginate.innerHTML = `<ul class='pagination'>
+                    ${leftLinks}
+                    ${links}
+                    ${rigthLinks}
+                    </ul>`;
+                }
+
+            }
+        }
+    })
+}
+
+createPagination();
+
+function clickLink(pageNumber) {
+    page = pageNumber;
+    createPagination();
+    fetchBooks();
+}
+
+function prev() {
+    page -= 1;
+    createPagination();
+    fetchBooks();
+}
+
+function next() {
+    page += 1;
+    createPagination();
+    fetchBooks();
+}
+
+function firstPage() {
+    page = 1;
+    createPagination();
+    fetchBooks();
+}
+
+function lastPage(totalPages) {
+    page = totalPages
+    createPagination();
+    fetchBooks();
+}

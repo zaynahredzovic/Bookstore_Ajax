@@ -21,7 +21,8 @@
    --colorGreenLight: #9ff669;
    --colorSilver: #FAFAFA;
    --colorRed: #dc3545;
-
+   --colorBlueDark: #4169E1;
+   --colorBlueLight: #00BFFF;
 
 }
 
@@ -666,6 +667,44 @@ Custom Input Field Design
 
 .message{
 	margin-bottom: 2rem;
+}
+
+/*=== Paginations ===*/
+
+.paginate{
+	margin: 2rem 0;
+}
+
+.pagination{
+	list-style: none;
+}
+
+.pagination li {
+	display: inline-block;
+}
+
+.pagination li a{
+	display: flex;
+	border: 1px solid transparent;
+	width: 4rem;
+	height: 4rem;
+	margin: 5px;
+	text-align: center;
+	border-radius: 50%;
+	color: var(--colorBlueDark);
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 0 1rem rgba(0, 0, 0, .2);
+}
+
+.active{
+	background: linear-gradient(to right, var(--colorBlueLight), var(--colorBlueDark));
+	color: var(--colorWhite)!important;
+}
+
+.active:active{
+	background: linear-gradient(to right, var(--colorBlueLight), var(--colorBlueDark));
+	color: var(--colorWhite)!important;
 }
 
 /* ==============

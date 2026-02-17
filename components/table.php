@@ -1,6 +1,7 @@
 <div class="table-section">
 	<div class="message"></div>
 	<div id="table"></div>
+	<div class="paginate"></div>
 	<!-- <table class="table">
 		<thead>
 			<tr>
